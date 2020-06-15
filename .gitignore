@@ -3,8 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Large DataBase File
+# DataBase File
 *.db
+
+# Mac Finder
+.DS_Store
+
+# VIM swap files
+*.swp
 
 # C extensions
 *.so
