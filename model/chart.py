@@ -1,9 +1,17 @@
-import sqlite3, datetime, json
+import sqlite3, datetime, json, glob, os
 import mplfinance as mpf
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import rc
-import os
+from pathlib import Path
+
+#Create Directories
+paths = ['./img', './dat']
+for path in paths:
+    Path(path).mkdir(parents=True, exist_ok=True)
+
+for path in Path('.').glob('./img/*.png'):
+    path.unlink()
 
 #Select Stock
 fp = open('./dat/stock_kospi200_en.json')
@@ -15,7 +23,7 @@ qry = 'SELECT * FROM chart_min_' + code + ' ORDER BY date'
 
 #Load Data
 con = sqlite3.connect('./dat/chart.db')
-df = pd.read_sql_query('SELECT * FROM chart_min_005930 ORDER BY date', con)
+df = pd.read_sql_query("SELECT * FROM chart_min_005930 WHERE date LIKE '202005%' ORDER BY date", con)
 con.close()
 
 #Refine Data for Plotting
@@ -48,14 +56,14 @@ for date in unique_dates:
     style = up_style if close_price > open_price else dn_style if close_price < open_price else uc_style
     change = 'RISE' if close_price > open_price else 'FALL' if close_price < open_price else 'NO CHANGE'
 
-    save_name = './png/' + code + '_min_' + date + '.png'
+    save_name = './img/' + code + '_min_' + date + '.png'
     title = '\n' + date + ' ' + change
     print(title)
 
     args = {
         'type': 'candle',
         'columns': ('open', 'high', 'low', 'close', 'volume'),
-        'volume': True,
+        'volume': False,
         'savefig': save_name,
         'title': title,
         'ylabel': '',
