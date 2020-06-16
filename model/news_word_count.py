@@ -11,7 +11,6 @@ paths = ['./img', './dat']
 for path in paths:
     Path(path).mkdir(parents=True, exist_ok=True)
 
-#qry = "SELECT titl,date FROM news_table WHERE date >= '20200501' AND date <= '20200505'"
 qry = "SELECT titl,date FROM news_table WHERE date LIKE '202005%'"
 print(qry)
 con = sqlite3.connect('./dat/news.db')
@@ -36,7 +35,7 @@ for index, row in df.iterrows():
 
 results = sorted(word_count.items(), key=(lambda x:x[1]), reverse=True)
 
-fp = open('news_word_top.csv', 'w')
+fp = open('./dat/news_word_top.csv', 'w')
 fp.write('word, count\n')
 for result in results:
     word = result[0]

@@ -4,19 +4,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from konlpy.tag import Okt
 
-def read_words(fn, value, dic):
-    fp = open(fn, 'r')
-
-    for line in fp.readlines():
-        word = line.splitlines()[0]
-        dic[word] = value
-    fp.close()
-
-def process_news(code, date):
-    word_dic = {}
-
-    read_words('news_word_negative.txt', -1, word_dic)
-    read_words('news_word_positive.txt', 1, word_dic)
+def process_news(con, code, date, dic, verbose):
 
     #Create Directories
     paths = ['./img', './dat']
@@ -29,15 +17,12 @@ def process_news(code, date):
     qry_date = date.replace('-', '')
 
     qry = "SELECT titl,dttm FROM news_table WHERE cod2='" + code + "' AND date='" + qry_date+"'"
-    print(qry)
-    con = sqlite3.connect('./dat/news.db')
     df = pd.read_sql_query(qry, con)
-    con.close()
 
     okt = Okt()
 
     positive = 0.0
-    negaive = 0.0
+    negative = 0.0
     neutral = 0.0
 
     for index, row in df.iterrows():
@@ -47,35 +32,42 @@ def process_news(code, date):
         vector = 0
         log = ""
         for word in words:
-            if word in word_dic:
-                vector += word_dic[word]
-                log = log + str(word_dic[word])
+            if word in dic:
+                vector += dic[word]
+
         if vector > 0:
             positive += 1
         elif vector < 0:
-            negaive += 1
+            negative += 1
         else:
             neutral += 1
 
-        #print(vector, log, title)
+    total = positive + negative + neutral
 
-    total = positive + negaive + neutral
+    result = 'N/A'
+        
+    if total > 0:
 
-    #print (' + : ' + str(positive/total) + ' - : ' + str(negaive/total) + ' 0 : ' + str(neutral/total) )
+        props = {
+            'labels': ['Positive', 'Negative', 'Neutral'],
+            'explode': (0, 0, 0),
+            'colors': ['lightcoral', 'lightskyblue', 'lavender'],
+            'startangle': 90,
+            'autopct':'%1.2f%%'
+        }
 
-    args = {
-        'labels': ['Positive', 'Negative', 'Neutral'],
-        'explode': (0, 0, 0),
-        'colors': ['lightcoral', 'lightskyblue', 'lavender'],
-        'startangle': 90,
-        'autopct':'%1.2f%%'
-    }
+        result = 'POSITIVE' if positive > negative else 'NEGATIVE'
+        title = date + ' ' + code + ' NEWS  ' + result
 
-    fname = './img/'+date + '_news.png'
-    pie_values = [positive, negaive, neutral]
-    plt.rcParams['figure.figsize'] = [4,3]
-    plt.pie(pie_values, **args)
-    plt.title(date)
-    plt.savefig(fname)
-    plt.close()
+        if verbose: print(title)
+
+        fname = './img/'+date + '_news.png'
+        pie_values = [positive, negative, neutral]
+        plt.rcParams['figure.figsize'] = [4,3]
+        plt.pie(pie_values, **props)
+        plt.title(title)
+        plt.savefig(fname)
+        plt.close()
+
+    return result
 
