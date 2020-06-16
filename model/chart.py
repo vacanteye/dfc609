@@ -4,16 +4,21 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import rc
 from pathlib import Path
+import news
 
 #Prepare Directories
 paths = ['./img', './dat']
 for path in paths:
     Path(path).mkdir(parents=True, exist_ok=True)
 
-for path in Path('.').glob('./img/chart*'):
+#Remove Previous Results
+for path in Path('.').glob('./img/*_chart.png'):
     path.unlink()
 
-#Select Stock
+for path in Path('.').glob('./img/*_news.png'):
+    path.unlink()
+
+#Select Stock 
 code = '005930'
 qry = "SELECT * FROM chart_min_" + code + " WHERE date LIKE '202005%' ORDER BY date"
 
@@ -49,9 +54,9 @@ for date in unique_dates:
     close_p = sub_df['close'][last_idx]
 
     style = up_style if close_p > open_p else dn_style if close_p < open_p else uc_style
-    change = 'RISE' if close_p > open_p else 'FALL' if close_p < open_p else 'NO CHANGE'
+    change = 'RISE' if close_p > open_p else 'FALL' if close_p < open_p else 'STEADY'
 
-    save_name = './img/chart_' + date + '.png'
+    save_name = './img/' + date + '_chart.png'
     title = '\n' + date + ' ' + change
     print(title)
 
@@ -63,9 +68,11 @@ for date in unique_dates:
         'title': title,
         'ylabel': '',
         'ylabel_lower': '',
-        'figscale': 0.8,
+        'figscale': 0.5,
         'style': style
         }
         
     rets = mpf.plot(sub_df, **props)
     print(save_name)
+    news.process_news(code, date)
+    break

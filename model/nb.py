@@ -6,7 +6,7 @@ from konlpy.utils import pprint
 def getting_list(filename, listname):
     while 1:
         line = filename.readline()
-        str = unicode(line, 'utf-8')
+        str = line
         line_parse = kkma.pos(str)
         for i in line_parse:
             if i[1] == 'SW':
@@ -38,9 +38,9 @@ def naive_bayes_classifier(test, train, all_count):
  
 # get the data
 kkma = Kkma()
-f_pos = open('./dat/word_pos.txt', 'r')
-f_neg = open('./dat/word_neg.txt', 'r')
-f_neu = open('./dat/word_neu.txt', 'r')
+f_pos = open('news_word_positive.txt','r')
+f_neg = open('news_word_negative.txt' 'r')
+f_neu = open('news_word_neutral.txt', 'r')
 f_test = open('test.txt', 'r')
  
 # tag list (보통명사, 동사, 형용사, 보조동사, 명사추정범주) 
@@ -52,7 +52,7 @@ list_neutral=[]
  
 # extract test sentence
 test_line = f_test.readline()
-test_s = unicode(test_line, 'utf-8')
+test_s = test_line
 test_list=kkma.pos(test_s)
 test_output=[]
 for i in test_list:
