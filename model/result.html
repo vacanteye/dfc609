@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+img {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 150px;
+}
+
+img:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+.btn {
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Green */
+.success {
+  border-color: #4CAF50;
+  color: green;
+}
+
+.success:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Blue */
+.info {
+  border-color: #2196F3;
+  color: dodgerblue;
+}
+
+.info:hover {
+  background: #2196F3;
+  color: white;
+}
+
+/* Orange */
+.warning {
+  border-color: #ff9800;
+  color: orange;
+}
+
+.warning:hover {
+  background: #ff9800;
+  color: white;
+}
+
+/* Red */
+.danger {
+  border-color: #f44336;
+  color: red;
+}
+
+.danger:hover {
+  background: #f44336;
+  color: white;
+}
+
+/* Gray */
+.default {
+  border-color: #e7e7e7;
+  color: black;
+}
+
+.default:hover {
+  background: #e7e7e7;
+}
+</style>
+
+<script type="text/javascript">
+    //var code = '005930';
+    //var kospi200 = require("./dat/stock_kospi200.json");
+    var btn = document.getElementById('btn');
+    btn.addEventListener('click', function(){
+        alert('Hello world');
+    })
+</script>
+
+</head>
+<body>
+
+<button id="btn" class="btn success">Success</button>
+
+<h2>삼성전자</h2>
+
+<a target="_blank" href="img/2020-05-04_chart.png">
+  <img src="img/2020-05-04_chart.png" alt="Forest" style="width:150px">
+</a>
+<a target="_blank" href="img/2020-05-05_chart.png">
+  <img src="img/2020-05-05_chart.png" alt="Forest" style="width:150px">
+</a>
+<br>
+<a target="_blank" href="img/2020-05-04_chart.png">
+  <img src="img/2020-05-04_chart.png" alt="Forest" style="width:150px">
+</a>
+<a target="_blank" href="img/2020-05-04_chart.png">
+  <img src="img/2020-05-04_chart.png" alt="Forest" style="width:150px">
+</a>
+
+
+
+
+</body>
+</html>
