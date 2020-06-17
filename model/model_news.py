@@ -4,10 +4,19 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from konlpy.tag import Okt
 
-def process_news(con, ax, code, date, dic, verbose):
+def plot_news(con, ax, code, date1, date2, dic):
 
-    qry_date = date.replace('-', '')
-    qry_stmt = "SELECT titl FROM news_table WHERE cod2='{}' AND date='{}'".format(code, qry_date)
+    qry_date1 = date1.replace('-', '')
+    qry_date2 = date2.replace('-', '')
+    qry_stmt = ""
+
+    if date1 == date2:
+        qry_stmt = """SELECT titl FROM news_table 
+                      WHERE cod2='{}' AND date='{}'""".format(code, qry_date1)
+    else:
+        qry_stmt = """SELECT titl FROM news_table 
+                      WHERE cod2='{}' AND date>='{}' AND date<='{}'""".format(code, qry_date1, qry_date2)
+
     df = pd.read_sql_query(qry_stmt, con)
 
     okt = Okt()
@@ -35,7 +44,7 @@ def process_news(con, ax, code, date, dic, verbose):
 
     total = positive + negative + neutral
 
-    result = 'N/A'
+    result = None
 
     if total > 0:
         labels = []
@@ -64,15 +73,12 @@ def process_news(con, ax, code, date, dic, verbose):
             'autopct':'%1.2f%%'
         }
 
-        result = 'POSITIVE' if positive > negative else 'NEGATIVE'
-        #title = '{} {} NEWS {}'.format(date, code, result)
-        title = '{}'.format(date)
+        #print('pos:{}, neg:{}'.format(positive, negative))
 
-        if verbose: print(title)
+        result = True if positive > negative else False
+        title = '{}:article(s)'.format(len(df))
 
-        fname = './img/{}+{}_news.png'.format(code, date)
-
+        ax.set_title(title)
         ax.pie(values, **props)
 
     return result
-
