@@ -1,12 +1,12 @@
 import sqlite3, datetime, json, glob
 import mplfinance as mpf
 import pandas as pd
-import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import rc
+from matplotlib.dates import DateFormatter
 from pathlib import Path
 
-def process_chart(con, code, date, verbose):
+def process_price(con, ax, code, date, verbose):
 
     #Load Data
     qry_date = date.replace('-', '')
@@ -27,6 +27,7 @@ def process_chart(con, code, date, verbose):
     up_style = mpf.make_mpf_style(base_mpl_style='default', facecolor='lavenderblush')
     dn_style = mpf.make_mpf_style(base_mpl_style='default', facecolor='lightcyan')
     uc_style = mpf.make_mpf_style(base_mpl_style='default')
+    color = 'white'
 
     first_idx = df.index[0]
     last_idx = df.index[-1]
@@ -36,24 +37,17 @@ def process_chart(con, code, date, verbose):
 
     style = up_style if close_p > open_p else dn_style if close_p < open_p else uc_style
     truth  = 'TRUE' if close_p > open_p else 'FALSE' if close_p < open_p else 'N/A'
+    color = 'lavenderblush' if close_p > open_p else 'lightcyan' if close_p < open_p else 'white'
 
-    if verbose: print(date + ' ' + code + ' CHART ' + truth)
+    save_name = './img/{}_{}_chart.png'.format(code, date)
+    title = '{}'.format(date)
 
-    save_name = './img/' + date + '_chart.png'
-    title = '\n' + date + ' CHART ' + truth
+    if verbose: print(title)
 
-    props = {
-        'type': 'candle',
-        'columns': ('open', 'high', 'low', 'close', 'volume'),
-        'volume': False,
-        'savefig': save_name,
-        'title': title,
-        'ylabel': '',
-        'ylabel_lower': '',
-        'figscale': 0.5,
-        'style': style
-        }
-        
-    mpf.plot(df, **props)
+    ax.set_facecolor(color)
+
+    line_axes = df['close'].plot(ax=ax)
+    line_axes.xaxis.set_major_formatter(DateFormatter('%H:%M'))
+    line_axes.set_xlabel('')
 
     return truth 

@@ -4,20 +4,11 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from konlpy.tag import Okt
 
-def process_news(con, code, date, dic, verbose):
-
-    #Create Directories
-    paths = ['./img', './dat']
-    for path in paths:
-        Path(path).mkdir(parents=True, exist_ok=True)
-
-    for path in Path('.').glob('./img/news*'):
-        path.unlink()
+def process_news(con, ax, code, date, dic, verbose):
 
     qry_date = date.replace('-', '')
-
-    qry = "SELECT titl,dttm FROM news_table WHERE cod2='" + code + "' AND date='" + qry_date+"'"
-    df = pd.read_sql_query(qry, con)
+    qry_stmt = "SELECT titl FROM news_table WHERE cod2='{}' AND date='{}'".format(code, qry_date)
+    df = pd.read_sql_query(qry_stmt, con)
 
     okt = Okt()
 
@@ -45,29 +36,43 @@ def process_news(con, code, date, dic, verbose):
     total = positive + negative + neutral
 
     result = 'N/A'
-        
+
     if total > 0:
+        labels = []
+        values = []
+        colors = []
+
+        if positive > 0:
+            labels.append('Positive')
+            values.append(positive)
+            colors.append('lightcoral')
+
+        if negative > 0:
+            labels.append('Negative')
+            values.append(negative)
+            colors.append('lightskyblue')
+
+        if negative > 0:
+            labels.append('Neutral')
+            values.append(neutral)
+            colors.append('lavender')
 
         props = {
-            'labels': ['Positive', 'Negative', 'Neutral'],
-            'explode': (0, 0, 0),
-            'colors': ['lightcoral', 'lightskyblue', 'lavender'],
+            'labels': labels ,
+            'colors': colors,
             'startangle': 90,
             'autopct':'%1.2f%%'
         }
 
         result = 'POSITIVE' if positive > negative else 'NEGATIVE'
-        title = date + ' ' + code + ' NEWS  ' + result
+        #title = '{} {} NEWS {}'.format(date, code, result)
+        title = '{}'.format(date)
 
         if verbose: print(title)
 
-        fname = './img/'+date + '_news.png'
-        pie_values = [positive, negative, neutral]
-        plt.rcParams['figure.figsize'] = [4,3]
-        plt.pie(pie_values, **props)
-        plt.title(title)
-        plt.savefig(fname)
-        plt.close()
+        fname = './img/{}+{}_news.png'.format(code, date)
+
+        ax.pie(values, **props)
 
     return result
 

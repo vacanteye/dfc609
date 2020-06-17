@@ -1,10 +1,10 @@
 import sqlite3, datetime, json, glob
+from pathlib import Path
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
-import news, chart
 from matplotlib import rc
-from pathlib import Path
+import model_news, model_price
 
 # Read word from file
 def read_words(fn, value, dic):
@@ -19,6 +19,7 @@ word_dic = {}
 read_words('./dat/news_word_negative.txt', -1, word_dic)
 read_words('./dat/news_word_positive.txt', 1, word_dic)
 
+#Load KOSPI200 
 fp = open('./dat/stock_kospi200_ko.json', 'r')
 kospi200_dic = json.load(fp)
 fp.close()
@@ -28,23 +29,26 @@ paths = ['./img', './dat']
 for path in paths:
     Path(path).mkdir(parents=True, exist_ok=True)
 
-for path in Path('.').glob('./img/*_chart.png'):
-    path.unlink()
-
-for path in Path('.').glob('./img/*_news.png'):
+for path in Path('.').glob('./img/*.png'):
     path.unlink()
 
 # DB Connection
-conn_chart = sqlite3.connect('./dat/chart.db')
+conn_price = sqlite3.connect('./dat/price.db')
 conn_news  = sqlite3.connect('./dat/news.db')
 
-dateindex = pd.date_range('2020-05-01', '2020-05-31', freq='B')
+dateindex = pd.date_range('2020-05-02', '2020-05-31', freq='B')
 dates = dateindex.strftime('%Y-%m-%d').tolist()
 
 logfile = open('./dat/model.csv', 'w')
 logfile.write('Code, Name, Precision, Recall, Accuracy\n')
 
 for code in kospi200_dic:
+    
+    fig, axes = plt.subplots(nrows=20, ncols=2)
+    fig.set_size_inches(10,80)
+    fig.tight_layout(pad=5.0)
+    fig.suptitle(code, y=0.8)
+   # code = '005930'
 
     name = kospi200_dic[code]
 
@@ -52,10 +56,28 @@ for code in kospi200_dic:
 
     verbose = False
 
+    index = 0
+
     for date in dates:
-        news_predict = news.process_news(conn_news, code, date, word_dic, verbose)
-        chart_truth  = chart.process_chart(conn_chart, code, date, verbose)
+
+        row = int(index / 2)
+        col = int(index % 2)
+        axes[row, col].set_title(date)
+        news_predict = model_news.process_news(conn_news, axes[row, col], code, date, word_dic, verbose)
+        index = index + 1
+
+        row = int(index / 2)
+        col = int(index % 2)
+        axes[row, col].set_title(date)
+        chart_truth  = model_price.process_price(conn_price, axes[row, col], code, date, verbose)
+        index = index + 1
+
         results.append({'date': date, 'predict': news_predict, 'truth': chart_truth})
+        break;
+
+    plt.savefig('./img/{}.png'.format(code), bbox_inches='tight')
+    plt.close()
+    break
 
    #Performance Measure 
     tp = 0.0
@@ -85,11 +107,11 @@ for code in kospi200_dic:
     logfile.write('\n')
 
 
+
 # DB Close
-conn_chart.close()
 conn_news.close()
+conn_price.close()
 
 # File Close
 logfile.close()
-
 
