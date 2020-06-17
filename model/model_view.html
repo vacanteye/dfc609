@@ -2,114 +2,124 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 <style>
-img {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 5px;
-  width: 150px;
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap');
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 img:hover {
   box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
 }
 
-.btn {
-  border: 2px solid black;
-  background-color: white;
-  color: black;
-  padding: 14px 28px;
-  font-size: 16px;
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
   cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
 }
 
-/* Green */
-.success {
-  border-color: #4CAF50;
-  color: green;
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
 }
 
-.success:hover {
-  background-color: #4CAF50;
-  color: white;
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
 }
 
-/* Blue */
-.info {
-  border-color: #2196F3;
-  color: dodgerblue;
-}
-
-.info:hover {
-  background: #2196F3;
-  color: white;
-}
-
-/* Orange */
-.warning {
-  border-color: #ff9800;
-  color: orange;
-}
-
-.warning:hover {
-  background: #ff9800;
-  color: white;
-}
-
-/* Red */
-.danger {
-  border-color: #f44336;
-  color: red;
-}
-
-.danger:hover {
-  background: #f44336;
-  color: white;
-}
-
-/* Gray */
-.default {
-  border-color: #e7e7e7;
-  color: black;
-}
-
-.default:hover {
-  background: #e7e7e7;
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
 }
 </style>
-
-<script type="text/javascript">
-    //var code = '005930';
-    //var kospi200 = require("./dat/stock_kospi200.json");
-    var btn = document.getElementById('btn');
-    btn.addEventListener('click', function(){
-        alert('Hello world');
-    })
-</script>
-
-</head>
 <body>
 
-<button id="btn" class="btn success">Success</button>
+<h2>DFC609 Big Data Analysis and Practice</h2>
 
-<h2>삼성전자</h2>
+<div class="tab">
+  <button class="tablinks" onclick="openTab(event, '005930')">005930</button>
+  <button class="tablinks" onclick="openTab(event, '006800')">006800</button>
+  <button class="tablinks" onclick="openTab(event, '017670')">017670</button>
+  <button class="tablinks" onclick="openTab(event, '035420')">035420</button>
+  <button class="tablinks" onclick="openTab(event, '066570')">066570</button>
+</div>
 
-<a target="_blank" href="img/2020-05-04_chart.png">
-  <img src="img/2020-05-04_chart.png" alt="Forest" style="width:150px">
-</a>
-<a target="_blank" href="img/2020-05-05_chart.png">
-  <img src="img/2020-05-05_chart.png" alt="Forest" style="width:150px">
-</a>
-<br>
-<a target="_blank" href="img/2020-05-04_chart.png">
-  <img src="img/2020-05-04_chart.png" alt="Forest" style="width:150px">
-</a>
-<a target="_blank" href="img/2020-05-04_chart.png">
-  <img src="img/2020-05-04_chart.png" alt="Forest" style="width:150px">
-</a>
+<div id="005930" class="tabcontent">
+  <h2>삼성전자</h3>
+    <a target="_blank" href="img/005930_1.png"><img src="img/005930_1.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/005930_1.png"><img src="img/005930_2.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/005930_1.png"><img src="img/005930_4.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/005930_1.png"><img src="img/005930_5.png" align="top" style="width:400px"></a>
+  </div>
+</div>
 
+<div id="006800" class="tabcontent">
+  <h2>미래에셋대우</h3>
+    <a target="_blank" href="img/006800_1.png"><img src="img/006800_1.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/006800_1.png"><img src="img/006800_2.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/006800_1.png"><img src="img/006800_4.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/006800_1.png"><img src="img/006800_5.png" align="top" style="width:400px"></a>
+</div>
 
+<div id="017670" class="tabcontent">
+  <h2>SK텔레콤</h3>
+    <a target="_blank" href="img/017670_1.png"><img src="img/017670_1.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/017670_1.png"><img src="img/017670_2.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/017670_1.png"><img src="img/017670_4.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/017670_1.png"><img src="img/017670_5.png" align="top" style="width:400px"></a>
+</div>
 
+<div id="035420" class="tabcontent">
+  <h2>NAVER</h3>
+    <a target="_blank" href="img/035420_1.png"><img src="img/035420_1.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/035420_1.png"><img src="img/035420_2.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/035420_1.png"><img src="img/035420_4.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/035420_1.png"><img src="img/035420_5.png" align="top" style="width:400px"></a>
+</div>
 
+<div id="066570" class="tabcontent">
+  <h3>SK텔레콤</h3>
+    <a target="_blank" href="img/066570_1.png"><img src="img/066570_1.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/066570_1.png"><img src="img/066570_2.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/066570_1.png"><img src="img/066570_4.png" align="top" style="width:400px"></a>
+    <a target="_blank" href="img/066570_1.png"><img src="img/066570_5.png" align="top" style="width:400px"></a>
+</div>
+
+<script>
+function openTab(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+   
 </body>
-</html>
+</html> 
