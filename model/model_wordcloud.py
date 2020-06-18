@@ -6,7 +6,7 @@ df = pd.read_csv('./dat/news_word_top.csv')
 df.set_index('word', inplace=True)
 freq_dict = df.to_dict()['count']
 
-font_path='/home/vacanteye/dev/py/dfc609/model/font/NotoSansKR-Regular.otf'
+font_path='./font/NotoSansKR-Regular.otf'
 
 wc = WordCloud(
     background_color='white', 
