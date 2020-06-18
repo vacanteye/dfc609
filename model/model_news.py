@@ -73,10 +73,11 @@ def plot_news(con, ax, code, date1, date2, dic):
             'autopct':'%1.2f%%'
         }
 
-        #print('pos:{}, neg:{}'.format(positive, negative))
 
         result = True if positive > negative else False
         title = '{}:article(s)'.format(len(df))
+
+        print('code:{} {} positive:{} negative:{}'.format(code, title, positive, negative))
 
         ax.set_title(title)
         ax.pie(values, **props)

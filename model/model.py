@@ -118,6 +118,7 @@ for code in codes:
 
     log = '{},{},{:.2f},{:.2f},{:.2f}' .format(code, name, precision, recall, accuracy)
     print(log)
+    print('')
 
     logfile.write(log)
     logfile.write('\n')
